@@ -250,6 +250,20 @@ pub struct Duration {
     pub nanosec: u32,
 }
 
+//   std_msgs__msg__Header header;
+//   float pressure;
+//   float temperature;
+//   float altitude;
+
+/// mavros_msgs/msg/MavlinkBarometer
+#[derive(Debug, Clone, PartialEq)]
+pub struct MavlinkBarometer {
+    pub header: Header,
+    pub pressure: f32,
+    pub temperature: f32,
+    pub altitude: f32,
+}
+
 /// Helper function to manually read f64 without automatic alignment
 ///
 /// This function provides optimized f64 reading with proper error handling
@@ -911,6 +925,21 @@ impl FromCdr for Duration {
         Ok(Self {
             sec: deserializer.read_i32()?,
             nanosec: deserializer.read_u32()?,
+        })
+    }
+}
+
+//   std_msgs__msg__Header header;
+//   float pressure;
+//   float temperature;
+//   float altitude;
+impl FromCdr for MavlinkBarometer {
+    fn from_cdr(deserializer: &mut CdrDeserializer) -> Result<Self> {
+        Ok(Self {
+            header: Header::from_cdr(deserializer)?,
+            pressure: deserializer.read_f32()?,
+            temperature: deserializer.read_f32()?,
+            altitude: deserializer.read_f32()?,
         })
     }
 }
